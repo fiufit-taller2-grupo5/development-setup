@@ -152,7 +152,11 @@ describe('Integration Tests ', () => {
           description: 'Test description',
           difficulty: 1,
           state: 'active',
-          trainerId: testTrainer.id
+          trainerId: testTrainer.id,
+          location: "Test loc",
+          days: "monday, tuesday",
+          start: "10:00",
+          end: "11:00"
         })
     );
     console.log(response.body);
@@ -177,10 +181,15 @@ describe('Integration Tests ', () => {
           description: 'Test description',
           difficulty: 1,
           state: 'active',
-          trainerId: testTrainer.id
+          trainerId: testTrainer.id,
+          days: "monday, tuesday",
+          start: "10:00",
+          end: "11:00",
+          "location": "Av test"
         })
     );
     const trainingId = response.body.id;
+    console.log("training id", trainingId);
     const training = await authedRequest(
       request(apiGatewayHost)
         .get(`/training-service/api/trainings/${trainingId}`)
@@ -211,7 +220,11 @@ describe('Integration Tests ', () => {
           description: 'Test description',
           difficulty: 1,
           state: 'active',
-          trainerId: testTrainer.id
+          trainerId: testTrainer.id,
+          days: "monday, tuesday",
+          start: "10:00",
+          end: "11:00",
+          "location": "Av test"
         })
     );
 
@@ -224,7 +237,11 @@ describe('Integration Tests ', () => {
           description: 'Test description',
           difficulty: 2,
           state: 'active',
-          trainerId: testTrainer.id
+          trainerId: testTrainer.id,
+          days: "monday, tuesday",
+          start: "10:00",
+          end: "11:00",
+          "location": "Av test"
         })
     );
 
@@ -251,7 +268,11 @@ describe('Integration Tests ', () => {
           description: 'Test description',
           difficulty: 1,
           state: 'active',
-          trainerId: testTrainer.id
+          trainerId: testTrainer.id,
+          days: "monday, tuesday",
+          start: "10:00",
+          end: "11:00",
+          "location": "Av test"
         })
     );
     const trainingId = response.body.id;
@@ -277,7 +298,11 @@ describe('Integration Tests ', () => {
           description: 'Test description',
           difficulty: 1,
           state: 'active',
-          trainerId: testTrainer.id
+          trainerId: testTrainer.id,
+          days: "monday, tuesday",
+          start: "10:00",
+          end: "11:00",
+          "location": "Av test"
         })
     );
 
@@ -290,7 +315,11 @@ describe('Integration Tests ', () => {
           description: 'Test description 2',
           difficulty: 4,
           state: 'active',
-          trainerId: testTrainer.id
+          trainerId: testTrainer.id,
+          days: "monday, tuesday",
+          start: "10:00",
+          end: "11:00",
+          "location": "Av test"
         })
     );
 
@@ -337,7 +366,11 @@ describe('Integration Tests ', () => {
           description: 'Test description',
           difficulty: 1,
           state: 'active',
-          trainerId: testTrainer.id
+          trainerId: testTrainer.id,
+          location: "Test loc",
+          days: "monday, tuesday",
+          start: "10:00",
+          end: "11:00"
         })
     );
 
@@ -370,7 +403,11 @@ describe('Integration Tests ', () => {
           description: 'Test description',
           difficulty: 1,
           state: 'active',
-          trainerId: testTrainer.id
+          trainerId: testTrainer.id,
+          location: "Test loc",
+          days: "monday, tuesday",
+          start: "10:00",
+          end: "11:00"
         })
     );
 
@@ -423,7 +460,11 @@ describe('Integration Tests ', () => {
           description: 'Test description',
           difficulty: 1,
           state: 'active',
-          trainerId: testTrainer.id
+          trainerId: testTrainer.id,
+          location: "Test loc",
+          days: "monday, tuesday",
+          start: "10:00",
+          end: "11:00"
         })
     );
 
@@ -507,7 +548,11 @@ describe('Integration Tests ', () => {
           description: 'Test description',
           difficulty: 1,
           state: 'active',
-          trainerId: testTrainer.id
+          trainerId: testTrainer.id,
+          location: "Test loc",
+          days: "monday, tuesday",
+          start: "10:00",
+          end: "11:00"
         })
     );
 
@@ -544,7 +589,11 @@ describe('Integration Tests ', () => {
           description: 'Test description',
           difficulty: 1,
           state: 'active',
-          trainerId: testTrainer.id
+          trainerId: testTrainer.id,
+          location: "Test loc",
+          days: "monday, tuesday",
+          start: "10:00",
+          end: "11:00"
         })
     );
 
@@ -662,7 +711,11 @@ describe('Integration Tests ', () => {
           description: 'Test description',
           difficulty: 1,
           state: 'active',
-          trainerId: testTrainer.id
+          trainerId: testTrainer.id,
+          location: "Test loc",
+          days: "monday, tuesday",
+          start: "10:00",
+          end: "11:00"
         })
     );
 
@@ -718,7 +771,11 @@ describe('Integration Tests ', () => {
           description: 'Test description',
           difficulty: 1,
           state: 'active',
-          trainerId: testTrainer.id
+          trainerId: testTrainer.id,
+          location: "Test loc",
+          days: "monday, tuesday",
+          start: "10:00",
+          end: "11:00"
         })
     );
 
@@ -731,7 +788,11 @@ describe('Integration Tests ', () => {
           description: 'Test description swim',
           difficulty: 3,
           state: 'active',
-          trainerId: testTrainer.id
+          trainerId: testTrainer.id,
+          location: "Test loc",
+          days: "monday, tuesday",
+          start: "10:00",
+          end: "11:00"
         })
     );
 
@@ -813,7 +874,11 @@ async def get_user_trainings_between_dates(user_id: int, request: IntervalUserTr
           description: 'Test description',
           difficulty: 3,
           state: 'active',
-          trainerId: testTrainer.id
+          trainerId: testTrainer.id,
+          location: "Test loc",
+          days: "monday, tuesday",
+          start: "10:00",
+          end: "11:00"
         })
     );
     expect(training.statusCode).to.be.equal(200);
@@ -902,5 +967,77 @@ async def get_user_trainings_between_dates(user_id: int, request: IntervalUserTr
     expect(response3.statusCode).to.be.equal(401);
     expect(response3.body).to.have.property('message', "Missing required fields (start or end date)");
   });
+
+  it("GET user trainingplans between interval", async () => {
+
+    const training = await authedRequest(
+      request(apiGatewayHost)
+        .post('/training-service/api/trainings')
+        .send({
+          title: 'Running',
+          type: 'Running',
+          description: 'Test description',
+          difficulty: 3,
+          state: 'active',
+          trainerId: testTrainer.id,
+          location: "Test loc",
+          days: "monday, wednesday",
+          start: "10:00",
+          end: "11:00"
+        })
+    );
+    expect(training.statusCode).to.be.equal(200);
+
+    const training2 = await authedRequest(
+      request(apiGatewayHost)
+        .post('/training-service/api/trainings')
+        .send({
+          title: 'Swimming',
+          type: 'Swimming',
+          description: 'Test description',
+          difficulty: 3,
+          state: 'active',
+          trainerId: testTrainer.id,
+          location: "Test loc",
+          days: "monday, wednesday",
+          start: "10:00",
+          end: "11:00"
+        })
+    );
+    expect(training2.statusCode).to.be.equal(200);
+
+    const response = await authedRequest(
+      request(apiGatewayHost)
+        .get(`/training-service/api/trainings/between_dates`)
+        .send({
+          days: "monday",
+        })
+    );
+
+    expect(response.statusCode).to.be.equal(200);
+    expect(response.body).to.be.an('array');
+    expect(response.body).to.have.lengthOf(2);
+    expect(response.body[0]).to.have.property('title', 'Running');
+    expect(response.body[1]).to.have.property('title', 'Swimming');
+
+    const response2 = await authedRequest(
+      request(apiGatewayHost)
+        .get(`/training-service/api/trainings/between_hours`)
+        .send({
+          start: "09:00",
+          end: "12:00"
+        })
+    );
+
+    expect(response2.statusCode).to.be.equal(200);
+    expect(response2.body).to.be.an('array');
+    expect(response2.body).to.have.lengthOf(2);
+    expect(response2.body[0]).to.have.property('title', 'Running');
+    expect(response2.body[1]).to.have.property('title', 'Swimming');
+
+    // Falta testear between dates and hours
+
+  }
+  );
 
 });
