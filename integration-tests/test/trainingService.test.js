@@ -613,7 +613,7 @@ describe('Integration Tests ', () => {
         )
     );
 
-    expect(response.statusCode).to.be.equal(401);
+    expect(response.statusCode).to.be.equal(400);
     expect(response.body).to.have.property('message', 'Distance, duration, steps and calories must be positive');
 
     const response2 = await authedRequest(
@@ -677,7 +677,7 @@ describe('Integration Tests ', () => {
         )
     );
 
-    expect(response5.statusCode).to.be.equal(402);
+    expect(response5.statusCode).to.be.equal(400);
     expect(response5.body).to.have.property('message', "Date can't be in the future");
 
     const response6 = await authedRequest(
