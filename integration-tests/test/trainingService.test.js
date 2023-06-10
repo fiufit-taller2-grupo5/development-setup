@@ -694,7 +694,7 @@ describe('Integration Tests ', () => {
         )
     );
 
-    expect(response6.statusCode).to.be.equal(403);
+    expect(response6.statusCode).to.be.equal(400);
     expect(response6.body).to.have.property('message', "Duration must be in format HH:MM:SS");
 
 
