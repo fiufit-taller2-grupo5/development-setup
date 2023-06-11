@@ -154,6 +154,8 @@ describe('Integration Tests ', () => {
           state: 'active',
           trainerId: testTrainer.id,
           location: "Test loc",
+          latitude: "95",
+          longitude: "55",
           days: "monday, tuesday",
           start: "10:00",
           end: "11:00"
@@ -185,7 +187,9 @@ describe('Integration Tests ', () => {
           days: "monday, tuesday",
           start: "10:00",
           end: "11:00",
-          "location": "Av test"
+          location: "Av test",
+          latitude: "95",
+          longitude: "55"
         })
     );
     const trainingId = response.body.id;
@@ -224,7 +228,9 @@ describe('Integration Tests ', () => {
           days: "monday, tuesday",
           start: "10:00",
           end: "11:00",
-          "location": "Av test"
+          location: "Av test",
+          latitude: "95",
+          longitude: "55"
         })
     );
 
@@ -241,7 +247,9 @@ describe('Integration Tests ', () => {
           days: "monday, tuesday",
           start: "10:00",
           end: "11:00",
-          "location": "Av test"
+          location: "Av test",
+          latitude: "95",
+          longitude: "55"
         })
     );
 
@@ -272,7 +280,9 @@ describe('Integration Tests ', () => {
           days: "monday, tuesday",
           start: "10:00",
           end: "11:00",
-          "location": "Av test"
+          location: "Av test",
+          latitude: "95",
+          longitude: "55"
         })
     );
     const trainingId = response.body.id;
@@ -302,7 +312,9 @@ describe('Integration Tests ', () => {
           days: "monday, tuesday",
           start: "10:00",
           end: "11:00",
-          "location": "Av test"
+          location: "Av test",
+          latitude: "95",
+          longitude: "55"
         })
     );
 
@@ -319,7 +331,9 @@ describe('Integration Tests ', () => {
           days: "monday, tuesday",
           start: "10:00",
           end: "11:00",
-          "location": "Av test"
+          location: "Av test",
+          latitude: "95",
+          longitude: "55"
         })
     );
 
@@ -368,6 +382,8 @@ describe('Integration Tests ', () => {
           state: 'active',
           trainerId: testTrainer.id,
           location: "Test loc",
+          latitude: "95",
+          longitude: "55",
           days: "monday, tuesday",
           start: "10:00",
           end: "11:00"
@@ -405,6 +421,8 @@ describe('Integration Tests ', () => {
           state: 'active',
           trainerId: testTrainer.id,
           location: "Test loc",
+          latitude: "95",
+          longitude: "55",
           days: "monday, tuesday",
           start: "10:00",
           end: "11:00"
@@ -462,6 +480,8 @@ describe('Integration Tests ', () => {
           state: 'active',
           trainerId: testTrainer.id,
           location: "Test loc",
+          latitude: "95",
+          longitude: "55",
           days: "monday, tuesday",
           start: "10:00",
           end: "11:00"
@@ -550,6 +570,8 @@ describe('Integration Tests ', () => {
           state: 'active',
           trainerId: testTrainer.id,
           location: "Test loc",
+          latitude: "95",
+          longitude: "55",
           days: "monday, tuesday",
           start: "10:00",
           end: "11:00"
@@ -591,6 +613,8 @@ describe('Integration Tests ', () => {
           state: 'active',
           trainerId: testTrainer.id,
           location: "Test loc",
+          latitude: "95",
+          longitude: "55",
           days: "monday, tuesday",
           start: "10:00",
           end: "11:00"
@@ -713,6 +737,8 @@ describe('Integration Tests ', () => {
           state: 'active',
           trainerId: testTrainer.id,
           location: "Test loc",
+          latitude: "95",
+          longitude: "55",
           days: "monday, tuesday",
           start: "10:00",
           end: "11:00"
@@ -773,6 +799,8 @@ describe('Integration Tests ', () => {
           state: 'active',
           trainerId: testTrainer.id,
           location: "Test loc",
+          latitude: "95",
+          longitude: "55",
           days: "monday, tuesday",
           start: "10:00",
           end: "11:00"
@@ -790,6 +818,8 @@ describe('Integration Tests ', () => {
           state: 'active',
           trainerId: testTrainer.id,
           location: "Test loc",
+          latitude: "95",
+          longitude: "55",
           days: "monday, tuesday",
           start: "10:00",
           end: "11:00"
@@ -876,6 +906,8 @@ async def get_user_trainings_between_dates(user_id: int, request: IntervalUserTr
           state: 'active',
           trainerId: testTrainer.id,
           location: "Test loc",
+          latitude: "95",
+          longitude: "55",
           days: "monday, tuesday",
           start: "10:00",
           end: "11:00"
@@ -981,6 +1013,8 @@ async def get_user_trainings_between_dates(user_id: int, request: IntervalUserTr
           state: 'active',
           trainerId: testTrainer.id,
           location: "Test loc",
+          latitude: "95",
+          longitude: "55",
           days: "monday, wednesday",
           start: "10:00",
           end: "11:00"
@@ -999,6 +1033,8 @@ async def get_user_trainings_between_dates(user_id: int, request: IntervalUserTr
           state: 'active',
           trainerId: testTrainer.id,
           location: "Test loc",
+          latitude: "95",
+          longitude: "55",
           days: "monday, wednesday",
           start: "10:00",
           end: "11:00"
