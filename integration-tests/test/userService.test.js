@@ -228,13 +228,14 @@ describe('Integration Tests ', function () {
                 .send({
                     name: 'test2',
                     email: 'test2@mail',
-                    location: 'test'
+                    location: 'test',
+
                 }));
         expect(putResponse.statusCode).to.be.equal(404);
         expect(putResponse.body.message).to.be.equal('user with id 123 not found');
     });
 
-    it('PUT user with invalid metadata, location missing', async () => {
+    it('PUT user with invalid metadata, things missing', async () => {
         const postResponse = await userRequest(
             request(apiGatewayHost)
                 .post('/user-service/api/users')
@@ -255,7 +256,7 @@ describe('Integration Tests ', function () {
                     name: 'test',
                     email: 'test@mail'
                 }));
-        expect(putResponse.statusCode).to.be.equal(500);
+        expect(putResponse.statusCode).to.be.equal(400);
     });
 
     it('GET user with entire information', async () => {
@@ -272,7 +273,11 @@ describe('Integration Tests ', function () {
             request(apiGatewayHost)
                 .put(`/user-service/api/users/${postResponse.body.id}/metadata`)
                 .send({
-                    location: 'test'
+                    location: 'test',
+                    interests: 'test',
+                    birthDate: '2000-01-01T00:00:00.000Z',
+                    height: 'test',
+                    weight: 'test'
                 }));
 
         const getResponse = await userRequest(
@@ -400,7 +405,11 @@ describe('Integration Tests ', function () {
                 .send({
                     name: 'test2',
                     email: 'test2@mail',
-                    location: 'test'
+                    location: 'test',
+                    interests: 'test',
+                    birthDate: '2000-01-01T00:00:00.000Z',
+                    height: 'test',
+                    weight: 'test'
                 }));
 
         const getResponse = await userRequest(
