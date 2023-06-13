@@ -866,32 +866,6 @@ describe('Integration Tests ', () => {
     expect(response.body[1]).to.have.property('distance', 100);
   });
 
-  /*
-
-@router.get("/user_training/{user_id}/between_dates")
-async def get_user_trainings_between_dates(user_id: int, request: IntervalUserTrainingRequest):
-    try:
-        check_if_user_exists_by_id(user_id)
-        if request.start > request.end:
-            raise HTTPException(
-                status_code=400, detail="Start date must be before end date")
-        result = training_dal.get_user_trainings_between_dates(
-            user_id, request.start, request.end)
-        return JSONResponse(status_code=200, content=result)
-    except HTTPException as e:
-        return JSONResponse(status_code=e.status_code, content={"message": str(e.detail)})
-
-
-   def get_user_trainings_between_dates(self, user_id: int, start: datetime, end: datetime):
-        print(f"start: {start}, end: {end}, user_id: {user_id}")
-        with self.Session() as session:
-            user_trainings = session.query(UserTraining).filter(
-                UserTraining.userId == user_id).filter(UserTraining.date >= start).filter(UserTraining.date <= end).all()
-            if not user_trainings:
-                return []
-            return [training.as_dict() for training in user_trainings]
-  */
-
 
   it("GET user trainings between dates", async () => {
 
@@ -1075,5 +1049,279 @@ async def get_user_trainings_between_dates(user_id: int, request: IntervalUserTr
 
   }
   );
+
+
+  it ("GET user trainings between interval group by weeks", async () => {
+
+
+    const training = await authedRequest(
+      request(apiGatewayHost)
+        .post('/training-service/api/trainings')
+        .send({
+          title: 'Test plan',
+          type: 'Running',
+          description: 'Test description',
+          difficulty: 1,
+          state: 'active',
+          trainerId: testTrainer.id,
+          location: "Test loc",
+          latitude: "95",
+          longitude: "55",
+          days: "monday, tuesday",
+          start: "10:00",
+          end: "11:00"
+        })
+    );
+
+    const training2 = await authedRequest(
+      request(apiGatewayHost)
+        .post('/training-service/api/trainings')
+        .send({
+          title: 'Test plan swimming',
+          type: 'Swimming',
+          description: 'Test description swim',
+          difficulty: 3,
+          state: 'active',
+          trainerId: testTrainer.id,
+          location: "Test loc",
+          latitude: "95",
+          longitude: "55",
+          days: "monday, tuesday",
+          start: "10:00",
+          end: "11:00"
+        })
+    );
+
+    const training_session1 = await authedRequest(
+      request(apiGatewayHost)
+        .post(`/training-service/api/trainings/${training.body.id}/user_training/${testUser.id}`)
+        .send(
+          {
+            "distance": 1,
+            "calories": 1,
+            "duration": "10:00:00",
+            "date": "2021-05-27T07:00:00Z",
+            "steps": 1
+          }
+        )
+    );
+
+    const training_session2 = await authedRequest(
+      request(apiGatewayHost)
+        .post(`/training-service/api/trainings/${training2.body.id}/user_training/${testUser.id}`)
+        .send(
+          {
+            "distance": 2,
+            "calories": 2,
+            "duration": "11:00:00",
+            "date": 2,
+            "steps": 2,
+            "date": "2022-05-27T07:00:00Z"
+          }
+        )
+    );
+
+    const training_session3 = await authedRequest(
+      request(apiGatewayHost)
+        .post(`/training-service/api/trainings/${training.body.id}/user_training/${testUser.id}`)
+        .send(
+          {
+            "distance": 3,
+            "calories": 3,
+            "duration": "11:00:00",
+            "date": 3,
+            "steps": 3,
+            "date": "2023-05-27T07:00:00Z"
+          }
+        )
+    );
+
+    const training_session6 = await authedRequest(
+      request(apiGatewayHost)
+        .post(`/training-service/api/trainings/${training.body.id}/user_training/${testUser.id}`)
+        .send(
+          {
+            "distance": 3,
+            "calories": 3,
+            "duration": "11:00:00",
+            "date": 3,
+            "steps": 3,
+            "date": "2023-05-27T08:00:00Z"
+          }
+        )
+    );
+
+    const training_session4 = await authedRequest(
+      request(apiGatewayHost)
+        .post(`/training-service/api/trainings/${training.body.id}/user_training/${testUser.id}`)
+        .send(
+          {
+            "distance": 4,
+            "calories": 4,
+            "duration": "10:00:00",
+            "date": "2021-05-28T07:00:00Z",
+            "steps": 4
+          }
+        )
+    );
+
+    const training_session5 = await authedRequest(
+      request(apiGatewayHost)
+        .post(`/training-service/api/trainings/${training2.body.id}/user_training/${testUser.id}`)
+        .send(
+          {
+            "distance": 5,
+            "calories": 5,
+            "duration": "10:00:00",
+            "date": "2021-07-28T07:00:00Z",
+            "steps": 5
+          }
+        )
+    );
+
+    
+    const response = await authedRequest(
+      request(apiGatewayHost)
+        .get(`/training-service/api/trainings/user_training/${testUser.id}/between_dates/group_by/year`)
+        .send({
+          start: "2021-05-27T06:00:00Z",
+          end: "2025-05-27T09:00:00Z"
+        })
+    );
+
+    expect(response.statusCode).to.be.equal(200);
+    expect(response.body).to.be.an('array');
+    expect(response.body).to.have.lengthOf(3);
+    expect(response.body[0]).to.have.property('year', 2021);
+    expect(response.body[0]).to.have.property('distance', 10);
+    expect(response.body[1]).to.have.property('year', 2022);
+    expect(response.body[1]).to.have.property('distance', 2);
+    expect(response.body[2]).to.have.property('year', 2023);
+    expect(response.body[2]).to.have.property('distance', 6);
+
+
+    const response2 = await authedRequest(
+      request(apiGatewayHost)
+        .get(`/training-service/api/trainings/user_training/${testUser.id}/between_dates/group_by/month`)
+        .send({
+          start: "2021-05-27T06:00:00Z",
+          end: "2025-05-27T09:00:00Z"
+        })
+    );
+
+    expect(response2.statusCode).to.be.equal(200);
+    expect(response2.body).to.be.an('array');
+    expect(response2.body).to.have.lengthOf(4);
+    expect(response2.body[0]).to.have.property('month', "5-2021");
+    expect(response2.body[0]).to.have.property('distance', 5);
+    expect(response2.body[1]).to.have.property('month', "5-2022");
+    expect(response2.body[1]).to.have.property('distance', 2);
+    expect(response2.body[2]).to.have.property('month', "5-2023");
+    expect(response2.body[2]).to.have.property('distance', 6);
+    expect(response2.body[3]).to.have.property('month', "7-2021");
+    expect(response2.body[3]).to.have.property('distance', 5);
+
+
+
+    const response3 = await authedRequest(
+      request(apiGatewayHost)
+        .get(`/training-service/api/trainings/user_training/${testUser.id}/between_dates/group_by/week`)
+        .send({
+          start: "2021-05-27T06:00:00Z",
+          end: "2025-05-27T09:00:00Z"
+        })
+    );
+
+      expect(response3.statusCode).to.be.equal(200);
+      expect(response3.body).to.be.an('array');
+      expect(response3.body).to.have.lengthOf(4);
+      expect(response3.body[0]).to.have.property('week', "21-2021");
+      expect(response3.body[0]).to.have.property('distance', 5);
+      expect(response3.body[1]).to.have.property('week', "21-2022");
+      expect(response3.body[1]).to.have.property('distance', 2);
+      expect(response3.body[2]).to.have.property('week', "21-2023");
+      expect(response3.body[2]).to.have.property('distance', 6);
+      expect(response3.body[3]).to.have.property('week', "30-2021");
+      expect(response3.body[3]).to.have.property('distance', 5);
+
+
+
+    const response4 = await authedRequest(
+      request(apiGatewayHost)
+        .get(`/training-service/api/trainings/user_training/${testUser.id}/between_dates/group_by/day`)
+        .send({
+          start: "2021-05-27T06:00:00Z",
+          end: "2025-05-27T09:00:00Z"
+        })
+    );
+
+    expect(response4.statusCode).to.be.equal(200);
+    expect(response4.body).to.be.an('array');
+    expect(response4.body).to.have.lengthOf(5);
+    expect(response4.body[0]).to.have.property('day', "27-5-2021");
+    expect(response4.body[0]).to.have.property('distance', 1);
+    expect(response4.body[1]).to.have.property('day', "27-5-2022");
+    expect(response4.body[1]).to.have.property('distance', 2);
+    expect(response4.body[2]).to.have.property('day', "27-5-2023");
+    expect(response4.body[2]).to.have.property('distance', 6);
+    expect(response4.body[3]).to.have.property('day', "28-5-2021");
+    expect(response4.body[3]).to.have.property('distance', 4);
+    expect(response4.body[4]).to.have.property('day', "28-7-2021");
+    expect(response4.body[4]).to.have.property('distance', 5);
+
+
+    const response5 = await authedRequest(
+      request(apiGatewayHost)
+        .get(`/training-service/api/trainings/user_training/${testUser.id}/between_dates/group_by/day`)
+        .send({
+          start: "2025-05-27T06:00:00Z",
+          end: "2030-05-27T09:00:00Z"
+        })
+    );
+
+    expect(response5.statusCode).to.be.equal(200);
+    expect(response5.body).to.be.an('array');
+    expect(response5.body).to.have.lengthOf(0);
+
+
+
+  });  
+
+
+  it ("GET user trainings between interval group by weeks invalid", async () => {
+  
+    const training = await authedRequest(
+      request(apiGatewayHost)
+        .post('/training-service/api/trainings')
+        .send({
+          title: 'Test plan',
+          type: 'Running',
+          description: 'Test description',
+          difficulty: 1,
+          state: 'active',
+          trainerId: testTrainer.id,
+          location: "Test loc",
+          latitude: "95",
+          longitude: "55",
+          days: "monday, tuesday",
+          start: "10:00",
+          end: "11:00"
+        })
+    );
+
+    const response = await authedRequest(
+      request(apiGatewayHost)
+        .get(`/training-service/api/trainings/user_training/${testUser.id}/between_dates/group_by/invalid`)
+        .send({
+          start: "2021-05-27T06:00:00Z",
+          end: "2025-05-27T09:00:00Z"
+        })
+    );
+
+    expect(response.statusCode).to.be.equal(400);
+    expect(response.body).to.have.property('message', "Invalid group by value");
+
+  });
+
 
 });

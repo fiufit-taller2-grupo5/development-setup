@@ -260,33 +260,34 @@ describe('Integration Tests ', function () {
     });
 
     it('GET user with entire information', async () => {
-        const postResponse = await userRequest(
+        this.timeout(1000000);
+        const users = await userRequest(
             request(apiGatewayHost)
-                .post('/user-service/api/users')
-                .send({
-                    name: 'test',
-                    email: 'test@mail'
-                })
-                .timeout(10000));
+                .get('/user-service/api/users'));
+
+
+        const userId = users.body[0].id;
 
         const metadataResponse = await userRequest(
             request(apiGatewayHost)
-                .put(`/user-service/api/users/${postResponse.body.id}/metadata`)
+                .put(`/user-service/api/users/${userId}/metadata`)
                 .send({
                     location: 'test',
-                    interests: 'test',
-                    birthDate: '2000-01-01T00:00:00.000Z',
-                    height: 'test',
-                    weight: 'test'
+                    interests: 'Cardio',
+                    birthDate: '2000-01-01T00:00:00.00Z',
+                    height: 1,
+                    weight: 2
                 }));
 
+        expect(metadataResponse.statusCode).to.be.equal(200);
+        expect(metadataResponse.body.status).to.be.equal(`Metadata added for user with id ${userId}`);
         const getResponse = await userRequest(
             request(apiGatewayHost)
-                .get(`/user-service/api/users/${postResponse.body.id}`));
+                .get(`/user-service/api/users/${userId}`));
 
         expect(getResponse.statusCode).to.be.equal(200);
-        expect(getResponse.body.name).to.be.equal('test');
-        expect(getResponse.body.email).to.be.equal('test@mail');
+        expect(getResponse.body.name).to.be.equal('test user');
+        expect(getResponse.body.email).to.be.equal('test-user@mail.com');
         expect(getResponse.body.location).to.be.equal('test');
     });
 
@@ -384,20 +385,14 @@ describe('Integration Tests ', function () {
 
     // change metadata in user 
     it('change user metadata', async () => {
-        const postResponse = await userRequest(
-            request(apiGatewayHost)
-                .post('/user-service/api/users')
-                .send({
-                    name: 'test',
-                    email: 'test@mail'
-                }
-                ));
-
-        const response = await userRequest(
+        
+        this.timeout(1000000);
+        const users = await userRequest(
             request(apiGatewayHost)
                 .get('/user-service/api/users'));
 
-        const userId = response.body[0].id;
+
+        const userId = users.body[0].id;
 
         const putResponse = await userRequest(
             request(apiGatewayHost)
@@ -406,10 +401,11 @@ describe('Integration Tests ', function () {
                     name: 'test2',
                     email: 'test2@mail',
                     location: 'test',
-                    interests: 'test',
+                    interests: 'Cardio',
                     birthDate: '2000-01-01T00:00:00.000Z',
-                    height: 'test',
-                    weight: 'test'
+                    height: 1,
+                    weight: 2,
+
                 }));
 
         const getResponse = await userRequest(
