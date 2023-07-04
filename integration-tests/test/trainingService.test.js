@@ -1181,7 +1181,7 @@ describe('Integration Tests ', () => {
     
     const response = await authedRequest(
       request(apiGatewayHost)
-        .get(`/training-service/api/trainings/user_training/${testUser.id}/between_dates/group_by/year`)
+        .post(`/training-service/api/trainings/user_training/${testUser.id}/between_dates/group_by/year`)
         .send({
           start: "2021-05-27T06:00:00Z",
           end: "2025-05-27T09:00:00Z"
@@ -1201,7 +1201,7 @@ describe('Integration Tests ', () => {
 
     const response2 = await authedRequest(
       request(apiGatewayHost)
-        .get(`/training-service/api/trainings/user_training/${testUser.id}/between_dates/group_by/month`)
+        .post(`/training-service/api/trainings/user_training/${testUser.id}/between_dates/group_by/month`)
         .send({
           start: "2021-05-27T06:00:00Z",
           end: "2025-05-27T09:00:00Z"
@@ -1224,7 +1224,7 @@ describe('Integration Tests ', () => {
 
     const response3 = await authedRequest(
       request(apiGatewayHost)
-        .get(`/training-service/api/trainings/user_training/${testUser.id}/between_dates/group_by/week`)
+        .post(`/training-service/api/trainings/user_training/${testUser.id}/between_dates/group_by/week`)
         .send({
           start: "2021-05-27T06:00:00Z",
           end: "2025-05-27T09:00:00Z"
@@ -1247,7 +1247,7 @@ describe('Integration Tests ', () => {
 
     const response4 = await authedRequest(
       request(apiGatewayHost)
-        .get(`/training-service/api/trainings/user_training/${testUser.id}/between_dates/group_by/day`)
+        .post(`/training-service/api/trainings/user_training/${testUser.id}/between_dates/group_by/day`)
         .send({
           start: "2021-05-27T06:00:00Z",
           end: "2025-05-27T09:00:00Z"
@@ -1271,7 +1271,7 @@ describe('Integration Tests ', () => {
 
     const response5 = await authedRequest(
       request(apiGatewayHost)
-        .get(`/training-service/api/trainings/user_training/${testUser.id}/between_dates/group_by/day`)
+        .post(`/training-service/api/trainings/user_training/${testUser.id}/between_dates/group_by/day`)
         .send({
           start: "2025-05-27T06:00:00Z",
           end: "2030-05-27T09:00:00Z"
@@ -1310,7 +1310,7 @@ describe('Integration Tests ', () => {
 
     const response = await authedRequest(
       request(apiGatewayHost)
-        .get(`/training-service/api/trainings/user_training/${testUser.id}/between_dates/group_by/invalid`)
+        .post(`/training-service/api/trainings/user_training/${testUser.id}/between_dates/group_by/invalid`)
         .send({
           start: "2021-05-27T06:00:00Z",
           end: "2025-05-27T09:00:00Z"
