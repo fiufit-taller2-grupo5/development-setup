@@ -591,9 +591,6 @@ describe('Integration Tests ', () => {
         )
     );
 
-    console.log("response body");
-    console.log(response.body);
-    console.log("response body fin");
     expect(response.statusCode).to.be.equal(200);
     expect(response.body).to.have.property('userId', testUser.id);
     expect(response.body).to.have.property('distance', 15);
@@ -1188,15 +1185,26 @@ describe('Integration Tests ', () => {
         })
     );
 
+    
     expect(response.statusCode).to.be.equal(200);
-    expect(response.body).to.be.an('array');
-    expect(response.body).to.have.lengthOf(3);
-    expect(response.body[0]).to.have.property('year', "2021");
-    expect(response.body[0]).to.have.property('distance', 10);
-    expect(response.body[1]).to.have.property('year', "2022");
-    expect(response.body[1]).to.have.property('distance', 2);
-    expect(response.body[2]).to.have.property('year', "2023");
-    expect(response.body[2]).to.have.property('distance', 6);
+    expect(response.body).to.be.an('object');
+    expect(response.body).to.have.property('label');
+    expect(response.body).to.have.property('distance');
+    expect(response.body).to.have.property('steps');
+    expect(response.body).to.have.property('calories');
+    expect(response.body).to.have.property('label').to.be.an('array');
+    expect(response.body).to.have.property('distance').to.be.an('array');
+    expect(response.body).to.have.property('steps').to.be.an('array');
+    expect(response.body).to.have.property('calories').to.be.an('array');
+    expect(response.body).to.have.property('label').to.have.lengthOf(3);
+    expect(response.body).to.have.property('distance').to.have.lengthOf(3);
+    expect(response.body).to.have.property('steps').to.have.lengthOf(3);
+    expect(response.body).to.have.property('calories').to.have.lengthOf(3);
+    expect(response.body).to.have.property('label').to.include.members(["2021", "2022", "2023"]);
+    expect(response.body).to.have.property('distance').to.include.members([10, 2, 6]);
+    expect(response.body).to.have.property('steps').to.include.members([10, 2, 6]);
+    expect(response.body).to.have.property('calories').to.include.members([10, 2, 6]);
+
 
 
     const response2 = await authedRequest(
@@ -1208,18 +1216,25 @@ describe('Integration Tests ', () => {
         })
     );
 
+    
     expect(response2.statusCode).to.be.equal(200);
-    expect(response2.body).to.be.an('array');
-    expect(response2.body).to.have.lengthOf(4);
-    expect(response2.body[0]).to.have.property('month', "5-2021");
-    expect(response2.body[0]).to.have.property('distance', 5);
-    expect(response2.body[1]).to.have.property('month', "5-2022");
-    expect(response2.body[1]).to.have.property('distance', 2);
-    expect(response2.body[2]).to.have.property('month', "5-2023");
-    expect(response2.body[2]).to.have.property('distance', 6);
-    expect(response2.body[3]).to.have.property('month', "7-2021");
-    expect(response2.body[3]).to.have.property('distance', 5);
-
+    expect(response2.body).to.be.an('object');
+    expect(response2.body).to.have.property('label');
+    expect(response2.body).to.have.property('distance');
+    expect(response2.body).to.have.property('steps');
+    expect(response2.body).to.have.property('calories');
+    expect(response2.body).to.have.property('label').to.be.an('array');
+    expect(response2.body).to.have.property('distance').to.be.an('array');
+    expect(response2.body).to.have.property('steps').to.be.an('array');
+    expect(response2.body).to.have.property('calories').to.be.an('array');
+    expect(response2.body).to.have.property('label').to.have.lengthOf(4);
+    expect(response2.body).to.have.property('distance').to.have.lengthOf(4);
+    expect(response2.body).to.have.property('steps').to.have.lengthOf(4);
+    expect(response2.body).to.have.property('calories').to.have.lengthOf(4);
+    expect(response2.body).to.have.property('label').to.include.members(["5-2021", "5-2022", "5-2023", "7-2021"]);
+    expect(response2.body).to.have.property('distance').to.include.members([5, 2, 6, 5]);
+    expect(response2.body).to.have.property('steps').to.include.members([5, 2, 6, 5]);
+    expect(response2.body).to.have.property('calories').to.include.members([5, 2, 6, 5]);
 
 
     const response3 = await authedRequest(
@@ -1231,17 +1246,25 @@ describe('Integration Tests ', () => {
         })
     );
 
-      expect(response3.statusCode).to.be.equal(200);
-      expect(response3.body).to.be.an('array');
-      expect(response3.body).to.have.lengthOf(4);
-      expect(response3.body[0]).to.have.property('week', "21-2021");
-      expect(response3.body[0]).to.have.property('distance', 5);
-      expect(response3.body[1]).to.have.property('week', "21-2022");
-      expect(response3.body[1]).to.have.property('distance', 2);
-      expect(response3.body[2]).to.have.property('week', "21-2023");
-      expect(response3.body[2]).to.have.property('distance', 6);
-      expect(response3.body[3]).to.have.property('week', "30-2021");
-      expect(response3.body[3]).to.have.property('distance', 5);
+    expect(response3.statusCode).to.be.equal(200);
+    expect(response3.body).to.be.an('object');
+    expect(response3.body).to.have.property('label');
+    expect(response3.body).to.have.property('distance');
+    expect(response3.body).to.have.property('steps');
+    expect(response3.body).to.have.property('calories');
+    expect(response3.body).to.have.property('label').to.be.an('array');
+    expect(response3.body).to.have.property('distance').to.be.an('array');
+    expect(response3.body).to.have.property('steps').to.be.an('array');
+    expect(response3.body).to.have.property('calories').to.be.an('array');
+    expect(response3.body).to.have.property('label').to.have.lengthOf(4);
+    expect(response3.body).to.have.property('distance').to.have.lengthOf(4);
+    expect(response3.body).to.have.property('steps').to.have.lengthOf(4);
+    expect(response3.body).to.have.property('calories').to.have.lengthOf(4);
+    expect(response3.body).to.have.property('label').to.include.members(["21-2021", "21-2022", "21-2023", "30-2021"]);
+    expect(response3.body).to.have.property('distance').to.include.members([5, 2, 6, 5]);
+    expect(response3.body).to.have.property('steps').to.include.members([5, 2, 6, 5]);
+    expect(response3.body).to.have.property('calories').to.include.members([5, 2, 6, 5]);
+      
 
 
 
@@ -1253,20 +1276,26 @@ describe('Integration Tests ', () => {
           end: "2025-05-27T09:00:00Z"
         })
     );
-
+    
     expect(response4.statusCode).to.be.equal(200);
-    expect(response4.body).to.be.an('array');
-    expect(response4.body).to.have.lengthOf(5);
-    expect(response4.body[0]).to.have.property('day', "27-5-2021");
-    expect(response4.body[0]).to.have.property('distance', 1);
-    expect(response4.body[1]).to.have.property('day', "27-5-2022");
-    expect(response4.body[1]).to.have.property('distance', 2);
-    expect(response4.body[2]).to.have.property('day', "27-5-2023");
-    expect(response4.body[2]).to.have.property('distance', 6);
-    expect(response4.body[3]).to.have.property('day', "28-5-2021");
-    expect(response4.body[3]).to.have.property('distance', 4);
-    expect(response4.body[4]).to.have.property('day', "28-7-2021");
-    expect(response4.body[4]).to.have.property('distance', 5);
+    expect(response4.body).to.be.an('object');
+    expect(response4.body).to.have.property('label');
+    expect(response4.body).to.have.property('distance');
+    expect(response4.body).to.have.property('steps');
+    expect(response4.body).to.have.property('calories');
+    expect(response4.body).to.have.property('label').to.be.an('array');
+    expect(response4.body).to.have.property('distance').to.be.an('array');
+    expect(response4.body).to.have.property('steps').to.be.an('array');
+    expect(response4.body).to.have.property('calories').to.be.an('array');
+    expect(response4.body).to.have.property('label').to.have.lengthOf(5);
+    expect(response4.body).to.have.property('distance').to.have.lengthOf(5);
+    expect(response4.body).to.have.property('steps').to.have.lengthOf(5);
+    expect(response4.body).to.have.property('calories').to.have.lengthOf(5);
+    expect(response4.body).to.have.property('label').to.include.members(["27-5-2021", "27-5-2022", "27-5-2023", "28-5-2021", "28-7-2021"]);
+    expect(response4.body).to.have.property('distance').to.include.members([1, 2, 6, 4, 5]);
+    expect(response4.body).to.have.property('steps').to.include.members([1, 2, 6, 4, 5]);
+    expect(response4.body).to.have.property('calories').to.include.members([1, 2, 6, 4, 5]);
+
 
 
     const response5 = await authedRequest(
@@ -1279,10 +1308,23 @@ describe('Integration Tests ', () => {
     );
 
     expect(response5.statusCode).to.be.equal(200);
-    expect(response5.body).to.be.an('array');
-    expect(response5.body).to.have.lengthOf(0);
-
-
+    expect(response5.body).to.be.an('object');
+    expect(response5.body).to.have.property('label');
+    expect(response5.body).to.have.property('distance');
+    expect(response5.body).to.have.property('steps');
+    expect(response5.body).to.have.property('calories');
+    expect(response5.body).to.have.property('label').to.be.an('array');
+    expect(response5.body).to.have.property('distance').to.be.an('array');
+    expect(response5.body).to.have.property('steps').to.be.an('array');
+    expect(response5.body).to.have.property('calories').to.be.an('array');
+    expect(response5.body).to.have.property('label').to.have.lengthOf(0);
+    expect(response5.body).to.have.property('distance').to.have.lengthOf(0);
+    expect(response5.body).to.have.property('steps').to.have.lengthOf(0);
+    expect(response5.body).to.have.property('calories').to.have.lengthOf(0);
+    expect(response5.body).to.have.property('label').to.include.members([]);
+    expect(response5.body).to.have.property('distance').to.include.members([]);
+    expect(response5.body).to.have.property('steps').to.include.members([]);
+    expect(response5.body).to.have.property('calories').to.include.members([]);
 
   });  
 
