@@ -164,7 +164,7 @@ describe('Integration Tests ', function () {
         );
 
         expect(response.statusCode).to.be.equal(400);
-        expect(response.body.error).to.be.equal('Missing name or email');
+        expect(response.body.error).to.be.equal('Falta nombre o contraseña');
     });
 
     it('POST user with used email', async () => {
@@ -185,7 +185,7 @@ describe('Integration Tests ', function () {
                 }));
 
         expect(postResponse.statusCode).to.be.equal(409);
-        expect(postResponse.body.message).to.be.equal('user with email test@mail already exists');
+        expect(postResponse.body.message).to.be.equal('email test@mail ya está en uso');
     });
 
 
@@ -329,7 +329,7 @@ describe('Integration Tests ', function () {
 
 
         expect(response.statusCode).to.be.equal(400);
-        expect(response.body.error).to.be.equal('Missing name or email');
+        expect(response.body.error).to.be.equal('Falta nombre o contraseña');
     });
 
     it('try to create admin with used email', async () => {
@@ -350,7 +350,7 @@ describe('Integration Tests ', function () {
                 }).set('test', 'true'));
 
         expect(postResponse.statusCode).to.be.equal(500);
-        expect(postResponse.body.message).to.be.equal('Email already in use');
+        expect(postResponse.body.message).to.be.equal('Email ya está en uso');
     });
 
 
@@ -458,4 +458,41 @@ describe('Integration Tests ', function () {
             expect(response.body.message).to.be.equal('you do not have access to the system');
         });
     });
+
+
+    it('sending notification to user', async () => {
+        this.timeout(1000000);
+        const users = await userRequest(
+            request(apiGatewayHost)
+                .get('/user-service/api/users'));
+
+
+        const userId = users.body[0].id;
+
+        const notif = await adminRequest(
+            request(apiGatewayHost)
+                .post(`/user-service/api/users/${userId}/notifications`)
+                .send({
+                    title: 'test notif',
+                    body: 'test notif body'
+                }));    
+
+        expect(notif.statusCode).to.be.equal(200);
+        expect(notif.body.status).to.be.equal("Notification saved");
+
+        const getResponse = await userRequest(
+            request(apiGatewayHost)
+                .get(`/user-service/api/users/${userId}/notifications`));
+
+        expect(getResponse.statusCode).to.be.equal(200);
+        expect(getResponse.body[0].title).to.be.equal('test notif');
+        expect(getResponse.body[0].body).to.be.equal('test notif body');
+        expect(getResponse.body[0].userId).to.be.equal(userId);
+        expect(getResponse.body[0].date).to.not.be.null;
+
+    });
+        
+
+
+
 });
