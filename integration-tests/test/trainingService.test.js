@@ -1174,7 +1174,6 @@ describe('Integration Tests ', () => {
           }
         )
     );
-
     
     const response = await authedRequest(
       request(apiGatewayHost)
@@ -1325,6 +1324,58 @@ describe('Integration Tests ', () => {
     expect(response5.body).to.have.property('distance').to.include.members([]);
     expect(response5.body).to.have.property('steps').to.include.members([]);
     expect(response5.body).to.have.property('calories').to.include.members([]);
+
+    const training_session7 = await authedRequest(
+      request(apiGatewayHost)
+        .post(`/training-service/api/trainings/${training2.body.id}/user_training/${testUser.id}`)
+        .send(
+          {
+            "distance": 5,
+            "calories": 5,
+            "duration": "10:00:00",
+            "date": "2017-07-04T07:00:00Z",
+            "steps": 5
+          }
+        )
+    );
+
+    const training_session8 = await authedRequest(
+      request(apiGatewayHost)
+        .post(`/training-service/api/trainings/${training2.body.id}/user_training/${testUser.id}`)
+        .send(
+          {
+            "distance": 5,
+            "calories": 5,
+            "duration": "10:00:00",
+            "date": "2017-07-06T07:00:00Z",
+            "steps": 5
+          }
+        )
+    );
+
+    const response6 = await authedRequest(
+      request(apiGatewayHost)
+        .post(`/training-service/api/trainings/user_training/${testUser.id}/between_dates/group_by/day`)
+        .send({
+          start: "2017-07-05T06:00:00Z",
+          end: "2017-07-05T09:00:00Z"
+        })
+    );
+
+    expect(response6.statusCode).to.be.equal(200);
+    expect(response6.body).to.be.an('object');
+    expect(response6.body).to.have.property('label');
+    expect(response6.body).to.have.property('distance');
+    expect(response6.body).to.have.property('steps');
+    expect(response6.body).to.have.property('calories');
+    expect(response6.body).to.have.property('label').to.be.an('array');
+    expect(response6.body).to.have.property('distance').to.be.an('array');
+    expect(response6.body).to.have.property('steps').to.be.an('array');
+    expect(response6.body).to.have.property('calories').to.be.an('array');
+    expect(response6.body).to.have.property('label').to.have.lengthOf(0);
+    expect(response6.body).to.have.property('distance').to.have.lengthOf(0);
+    expect(response6.body).to.have.property('steps').to.have.lengthOf(0);
+    expect(response6.body).to.have.property('calories').to.have.lengthOf(0);
 
   });  
 
