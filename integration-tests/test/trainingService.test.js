@@ -529,9 +529,8 @@ describe('Integration Tests ', () => {
     );
 
     expect(review3.statusCode).to.be.equal(400);
-    expect(review3.body).to.have.property('message', 'Score must be between 1 and 5');
+    expect(review3.body).to.have.property('message', 'Score debe estar entre 1 y 5');
 
-    // missing score
     const review4 = await authedRequest(
       request(apiGatewayHost)
         .post(`/training-service/api/trainings/${trainingId}/review/${testUser.id}`)
@@ -541,7 +540,7 @@ describe('Integration Tests ', () => {
     );
 
     expect(review4.statusCode).to.be.equal(400);
-    expect(review4.body).to.have.property('message', 'Missing required fields (user_id, training_plan_id or score))');
+    expect(review4.body).to.have.property('message', 'Faltn campos obligatorios (user_id, training_plan_id o score)');
 
     // trainer cannot review his own training
     const review5 = await authedRequest(
@@ -554,7 +553,7 @@ describe('Integration Tests ', () => {
     );
 
     expect(review5.statusCode).to.be.equal(409);
-    expect(review5.body).to.have.property('message', "Trainer can't review his own training plan");
+    expect(review5.body).to.have.property('message', "No puedes valorar tus propios planes de entrenamiento");
   });
 
   it("POST user training", async () => {
@@ -638,7 +637,7 @@ describe('Integration Tests ', () => {
     );
 
     expect(response.statusCode).to.be.equal(400);
-    expect(response.body).to.have.property('message', 'Distance, duration, steps and calories must be positive');
+    expect(response.body).to.have.property('message', 'La distancia, pasos y calorías deben ser positivos');
 
     const response2 = await authedRequest(
       request(apiGatewayHost)
@@ -667,7 +666,7 @@ describe('Integration Tests ', () => {
     );
 
     expect(response3.statusCode).to.be.equal(400);
-    expect(response3.body).to.have.property('message', 'Missing required fields (distance, duration, steps, calories or date)');
+    expect(response3.body).to.have.property('message', 'Faltan datos obligatorios (distancia, duración, pasos, calorías o fecha)');
 
 
     const response4 = await authedRequest(
@@ -702,7 +701,7 @@ describe('Integration Tests ', () => {
     );
 
     expect(response5.statusCode).to.be.equal(400);
-    expect(response5.body).to.have.property('message', "Date can't be in the future");
+    expect(response5.body).to.have.property('message', "La fecha no puede ser posterior a la actual");
 
     const response6 = await authedRequest(
       request(apiGatewayHost)
@@ -719,7 +718,7 @@ describe('Integration Tests ', () => {
     );
 
     expect(response6.statusCode).to.be.equal(400);
-    expect(response6.body).to.have.property('message', "Duration must be in format HH:MM:SS");
+    expect(response6.body).to.have.property('message', "El formato debe ser HH:MM:SS");
 
 
   });
@@ -960,7 +959,7 @@ describe('Integration Tests ', () => {
     );
 
     expect(response2.statusCode).to.be.equal(400);
-    expect(response2.body).to.have.property('message', "Start date must be before end date");
+    expect(response2.body).to.have.property('message', "La fecha de inicio debe ser anterior a la fecha de fin");
 
     const response3 = await authedRequest(
       request(apiGatewayHost)
@@ -971,7 +970,7 @@ describe('Integration Tests ', () => {
     );
 
     expect(response3.statusCode).to.be.equal(401);
-    expect(response3.body).to.have.property('message', "Missing required fields (start or end date)");
+    expect(response3.body).to.have.property('message', "Faltan campos obligatorios (comienzo o fin)");
   });
 
   it("GET user trainingplans between interval", async () => {
