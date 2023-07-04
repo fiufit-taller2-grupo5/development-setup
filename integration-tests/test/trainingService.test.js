@@ -1365,4 +1365,169 @@ describe('Integration Tests ', () => {
   });
 
 
+  it ("POST athlete goal", async () => {
+      
+      const response = await authedRequest(
+        request(apiGatewayHost)
+          .post(`/training-service/api/trainings/goals/${testUser.id}`)
+          .send({
+            title: "Test goal",
+            description: "Test description",
+            type: "Calorias",
+            metric: 100
+          })
+      );
+  
+      expect(response.statusCode).to.be.equal(200);
+      expect(response.body).to.have.property('title', 'Test goal');
+      expect(response.body).to.have.property('description', 'Test description');
+      expect(response.body).to.have.property('type', 'Calorias');
+      expect(response.body).to.have.property('metric', 100);
+      expect(response.body).to.have.property('athleteId', testUser.id);
+  
+    }
+  );
+
+  it ("POST athlete goal invalid", async () => {
+
+    const response = await authedRequest(
+      request(apiGatewayHost)
+        .post(`/training-service/api/trainings/goals/${testUser.id}`)
+        .send({
+          title: "Test goal",
+          description: "Test description",
+          type: "Calorias",
+          metric: -100
+        })
+    );
+
+    expect(response.statusCode).to.be.equal(400);
+    expect(response.body).to.have.property('message', 'La métrica debe ser positiva');
+
+    const response2 = await authedRequest(
+      request(apiGatewayHost)
+        .post(`/training-service/api/trainings/goals/${testUser.id}`)
+        .send({
+          title: "Test goal",
+          type: "Calorias",
+          metric: 100
+        })
+    );
+
+    expect(response2.statusCode).to.be.equal(400);
+    expect(response2.body).to.have.property('message', 'Faltan campos obligatorios (titulo, tipo o descripción)');
+
+      }
+  );
+
+  it ("GET athlete goals", async () => {
+
+    const goal = await authedRequest(
+      request(apiGatewayHost)
+        .post(`/training-service/api/trainings/goals/${testUser.id}`)
+        .send({
+          title: "Test goal",
+          description: "Test description",
+          type: "Calorias",
+          metric: 100
+        })
+    );
+
+    const response = await authedRequest(
+      request(apiGatewayHost)
+        .get(`/training-service/api/trainings/goals/${testUser.id}`)
+
+    );
+
+    expect(response.statusCode).to.be.equal(200);
+    expect(response.body).to.be.an('array');
+    expect(response.body).to.have.lengthOf(1);
+    expect(response.body[0]).to.have.property('title', 'Test goal');
+    expect(response.body[0]).to.have.property('description', 'Test description');
+    expect(response.body[0]).to.have.property('type', 'Calorias');
+    expect(response.body[0]).to.have.property('metric', 100);
+    expect(response.body[0]).to.have.property('athleteId', testUser.id);
+  }
+  );
+
+  it ("PUT athlete goal", async () => {
+    
+    const goal = await authedRequest(
+      request(apiGatewayHost)
+        .post(`/training-service/api/trainings/goals/${testUser.id}`)
+        .send({
+          title: "Test goal",
+          description: "Test description",
+          type: "Calorias",
+          metric: 100
+        })
+    );
+
+    const response = await authedRequest(
+      request(apiGatewayHost)
+        .put(`/training-service/api/trainings/goals/${goal.body.id}`)
+        .send({
+          title: "Test goal updated",
+          description: "Test description updated",
+          type: "Pasos",
+          metric: 200
+
+        })
+    );
+
+    expect(response.statusCode).to.be.equal(200);
+    expect(response.body).to.have.property('title', 'Test goal updated');
+    expect(response.body).to.have.property('description', 'Test description updated');
+    expect(response.body).to.have.property('type', 'Pasos');
+    expect(response.body).to.have.property('metric', 200);
+    expect(response.body).to.have.property('athleteId', testUser.id);
+
+    const response2 = await authedRequest(
+      request(apiGatewayHost)
+        .put(`/training-service/api/trainings/goals/${goal.body.id}`)
+        .send({
+          title: "Test goal updated",
+          description: "Test description updated",
+          type: "aa",
+          metric: 200
+        })
+    );
+
+    expect(response2.statusCode).to.be.equal(400);
+    expect(response2.body).to.have.property('message', 'Tipo de objetivo inválido: (Calorias, Pasos, Distancia))');
+      }
+  );
+
+  it ("DELETE athlete goal", async () => {
+    const goal = await authedRequest(
+      request(apiGatewayHost)
+        .post(`/training-service/api/trainings/goals/${testUser.id}`)
+        .send({
+          title: "Test goal",
+          description: "Test description",
+          type: "Calorias",
+          metric: 100
+        })
+    );
+
+    const response = await authedRequest(
+      request(apiGatewayHost)
+        .delete(`/training-service/api/trainings/goals/${goal.body.id}`)
+    );
+
+    expect(response.statusCode).to.be.equal(200);
+    expect(response.body).to.have.property('message', 'Goal deleted successfully');
+
+    const response2 = await authedRequest(
+      request(apiGatewayHost)
+        .get(`/training-service/api/trainings/goals/${testUser.id}`)
+
+    );
+
+    expect(response2.statusCode).to.be.equal(200);
+    expect(response2.body).to.be.an('array');
+    expect(response2.body).to.have.lengthOf(0);
+    }
+  );
+
 });
