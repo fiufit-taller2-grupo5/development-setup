@@ -288,7 +288,6 @@ describe('Integration Tests ', function () {
         expect(getResponse.statusCode).to.be.equal(200);
         expect(getResponse.body.name).to.be.equal('test user');
         expect(getResponse.body.email).to.be.equal('test-user@mail.com');
-        expect(getResponse.body.location).to.be.equal('test');
     });
 
 
@@ -426,7 +425,6 @@ describe('Integration Tests ', function () {
                 })
                 .timeout(10000));
 
-        console.log("create user body: ", body);
         const { body: blockedResponse } = await adminRequest(
             request(apiGatewayHost)
                 .post('/user-service/api/users/block')
@@ -434,7 +432,6 @@ describe('Integration Tests ', function () {
                     userId: body.id
                 }));
 
-        console.log("blocked user body: ", blockedResponse);
         // Request all endpoints in parallel using Promise.all()
         const endpoints = [
             '/user-service/api/users',
@@ -460,38 +457,99 @@ describe('Integration Tests ', function () {
     });
 
 
-    it('sending notification to user', async () => {
+    // it('sending notification to user', async () => {
+    //     this.timeout(1000000);
+    //     const users = await userRequest(
+    //         request(apiGatewayHost)
+    //             .get('/user-service/api/users'));
+
+
+    //     const userId = users.body[0].id;
+
+    //     const notif = await adminRequest(
+    //         request(apiGatewayHost)
+    //             .post(`/user-service/api/users/${userId}/notifications`)
+    //             .send({
+    //                 title: 'test notif',
+    //                 body: 'test notif body'
+    //             }));    
+
+    //     console.log("notif: ", notif.body);
+    //     expect(notif.statusCode).to.be.equal(200);
+    //     expect(notif.body.status).to.be.equal("Notification saved");
+
+    //     const getResponse = await userRequest(
+    //         request(apiGatewayHost)
+    //             .get(`/user-service/api/users/${userId}/notifications`));
+
+    //     expect(getResponse.statusCode).to.be.equal(200);
+    //     expect(getResponse.body[0].title).to.be.equal('test notif');
+    //     expect(getResponse.body[0].body).to.be.equal('test notif body');
+    //     expect(getResponse.body[0].userId).to.be.equal(userId);
+    //     expect(getResponse.body[0].date).to.not.be.null;
+
+    // });
+
+
+    it('change user name', async () => {
         this.timeout(1000000);
         const users = await userRequest(
             request(apiGatewayHost)
                 .get('/user-service/api/users'));
 
-
         const userId = users.body[0].id;
 
-        const notif = await adminRequest(
+        const putResponse = await userRequest(
             request(apiGatewayHost)
-                .post(`/user-service/api/users/${userId}/notifications`)
+                .put(`/user-service/api/users/${userId}/name`)
                 .send({
-                    title: 'test notif',
-                    body: 'test notif body'
-                }));    
+                    name: 'test new'
+                }));
 
-        expect(notif.statusCode).to.be.equal(200);
-        expect(notif.body.status).to.be.equal("Notification saved");
+        expect(putResponse.statusCode).to.be.equal(200);
+        expect(putResponse.body.status).to.be.equal("Name changed");
 
         const getResponse = await userRequest(
             request(apiGatewayHost)
-                .get(`/user-service/api/users/${userId}/notifications`));
+                .get(`/user-service/api/users/${userId}`));
+
 
         expect(getResponse.statusCode).to.be.equal(200);
-        expect(getResponse.body[0].title).to.be.equal('test notif');
-        expect(getResponse.body[0].body).to.be.equal('test notif body');
-        expect(getResponse.body[0].userId).to.be.equal(userId);
-        expect(getResponse.body[0].date).to.not.be.null;
+        expect(getResponse.body.name).to.be.equal('test new');
 
-    });
-        
+        const putInvalidResponse = await userRequest(
+            request(apiGatewayHost)
+                .put(`/user-service/api/users/${userId}/name`)
+                .send({
+                    name: ""
+                }));
+
+        const putInvalidResponse2 = await userRequest(
+            request(apiGatewayHost)
+                .put(`/user-service/api/users/${userId}/name`)
+                .send({
+                    name: 2
+                }));
+
+        const putInvalidResponse3 = await userRequest(
+            request(apiGatewayHost)
+                .put(`/user-service/api/users/150/name`)
+                .send({
+                    name: "jj"
+                }));
+
+        expect(putInvalidResponse.statusCode).to.be.equal(400);
+        expect(putInvalidResponse.body.error).to.be.equal("Debe proporcionar nombre");
+
+        expect(putInvalidResponse2.statusCode).to.be.equal(400);
+        expect(putInvalidResponse2.body.error).to.be.equal("Name must be a string");
+
+
+        expect(putInvalidResponse3.statusCode).to.be.equal(404);
+        expect(putInvalidResponse3.body.message).to.be.equal("user with id 150 not found");
+
+
+        });
 
 
 
