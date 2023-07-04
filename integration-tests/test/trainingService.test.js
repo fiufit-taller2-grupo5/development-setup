@@ -1191,11 +1191,11 @@ describe('Integration Tests ', () => {
     expect(response.statusCode).to.be.equal(200);
     expect(response.body).to.be.an('array');
     expect(response.body).to.have.lengthOf(3);
-    expect(response.body[0]).to.have.property('year', 2021);
+    expect(response.body[0]).to.have.property('year', "2021");
     expect(response.body[0]).to.have.property('distance', 10);
-    expect(response.body[1]).to.have.property('year', 2022);
+    expect(response.body[1]).to.have.property('year', "2022");
     expect(response.body[1]).to.have.property('distance', 2);
-    expect(response.body[2]).to.have.property('year', 2023);
+    expect(response.body[2]).to.have.property('year', "2023");
     expect(response.body[2]).to.have.property('distance', 6);
 
 
