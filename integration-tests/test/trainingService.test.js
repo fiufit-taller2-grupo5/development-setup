@@ -1514,6 +1514,8 @@ describe('Integration Tests ', () => {
         })
     );
 
+    console.log(goal.body);
+
     const response = await authedRequest(
       request(apiGatewayHost)
         .put(`/training-service/api/trainings/goals/${goal.body.id}`)
@@ -1526,12 +1528,29 @@ describe('Integration Tests ', () => {
         })
     );
 
+    console.log(response.body);
+
     expect(response.statusCode).to.be.equal(200);
     expect(response.body).to.have.property('title', 'Test goal updated');
     expect(response.body).to.have.property('description', 'Test description updated');
     expect(response.body).to.have.property('type', 'Pasos');
     expect(response.body).to.have.property('metric', 200);
     expect(response.body).to.have.property('athleteId', testUser.id);
+
+    const response2bis = await authedRequest(
+      request(apiGatewayHost)
+        .get(`/training-service/api/trainings/goals/${testUser.id}`)
+    );
+
+    expect(response2bis.statusCode).to.be.equal(200);
+    expect(response2bis.body).to.be.an('array');
+    expect(response2bis.body).to.have.lengthOf(1);
+    expect(response2bis.body[0]).to.have.property('title', 'Test goal updated');
+    expect(response2bis.body[0]).to.have.property('description', 'Test description updated');
+    expect(response2bis.body[0]).to.have.property('type', 'Pasos');
+    expect(response2bis.body[0]).to.have.property('metric', 200);
+    expect(response2bis.body[0]).to.have.property('athleteId', testUser.id);
+
 
     const response2 = await authedRequest(
       request(apiGatewayHost)
