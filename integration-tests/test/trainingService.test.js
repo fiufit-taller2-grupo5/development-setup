@@ -1609,4 +1609,32 @@ describe('Integration Tests ', () => {
     }
   );
 
+  it ("PUT achievement", async () => {
+    const goal = await authedRequest(
+      request(apiGatewayHost)
+        .post(`/training-service/api/trainings/goals/${testUser.id}`)
+        .send({
+          title: "Test goal",
+          description: "Test description",
+          type: "Calorias",
+          metric: 100
+        })
+    );
+
+    console.log(goal.statusCode);
+    console.log(goal.body);
+    console.log(goal.statusCode);
+
+    const response = await authedRequest(
+      request(apiGatewayHost)
+        .put(`/training-service/api/trainings/goals/${goal.body.id}/achieve`)
+        .send({})
+    );
+
+    expect(response.statusCode).to.be.equal(200);
+    expect(response.body).to.have.property('title', 'Test goal');
+    expect(response.body).to.have.property('achieved', true);
+    expect(response.body).to.have.property('lastAchieved');
+  });
+
 });
