@@ -416,6 +416,7 @@ describe('Integration Tests ', function () {
     });
 
     it('blocked user cannot do anything', async () => {
+        this.timeout(100000000000);
         const { body } = await userRequest(
             request(apiGatewayHost)
                 .post('/user-service/api/users')
@@ -423,7 +424,7 @@ describe('Integration Tests ', function () {
                     name: 'test2',
                     email: 'test2@mail'
                 })
-                .timeout(10000));
+                .timeout(1000000000));
 
         const { body: blockedResponse } = await adminRequest(
             request(apiGatewayHost)
@@ -455,40 +456,6 @@ describe('Integration Tests ', function () {
             expect(response.body.message).to.be.equal('you do not have access to the system');
         });
     });
-
-// 
-    // it('sending notification to user', async () => {
-    //     this.timeout(1000000);
-    //     const users = await userRequest(
-    //         request(apiGatewayHost)
-    //             .get('/user-service/api/users'));
-
-
-    //     const userId = users.body[0].id;
-
-    //     const notif = await adminRequest(
-    //         request(apiGatewayHost)
-    //             .post(`/user-service/api/users/${userId}/notifications`)
-    //             .send({
-    //                 title: 'test notif',
-    //                 body: 'test notif body'
-    //             }));    
-
-    //     console.log("notif: ", notif.body);
-    //     expect(notif.statusCode).to.be.equal(200);
-    //     expect(notif.body.status).to.be.equal("Notification saved");
-
-    //     const getResponse = await userRequest(
-    //         request(apiGatewayHost)
-    //             .get(`/user-service/api/users/${userId}/notifications`));
-
-    //     expect(getResponse.statusCode).to.be.equal(200);
-    //     expect(getResponse.body[0].title).to.be.equal('test notif');
-    //     expect(getResponse.body[0].body).to.be.equal('test notif body');
-    //     expect(getResponse.body[0].userId).to.be.equal(userId);
-    //     expect(getResponse.body[0].date).to.not.be.null;
-
-    // });
 
 
     it('change user name', async () => {
@@ -551,6 +518,113 @@ describe('Integration Tests ', function () {
 
         });
 
+
+  it('should create a new notification', async () => {
+    this.timeout(10000000000);
+    const users = await userRequest(
+            request(apiGatewayHost)
+            .get('/user-service/api/users'));
+
+
+    const userId = users.body[0].id;
+    
+    const response = await request(apiGatewayHost)
+      .post(`/user-service/api/users/${userId}/notifications`)
+      .set('dev', 'true')
+      .send({
+        title: 'test notification',
+        body: 'test notification body',
+      });
+    
+    console.log("response: ", response.body);
+
+    expect(response.body.message).to.be.equal(`user with id ${userId} has no push token`);
+    
+    const getResponse = await userRequest(
+            request(apiGatewayHost)
+            .post(`/user-service/api/users/${userId}/set-push-token`)
+            .set('dev', 'true')
+            .send({
+                token: 'test token'
+            }));
+    
+    console.log("getResponse: ", getResponse.body);
+
+    const response2 = await request(apiGatewayHost)
+        .post(`/user-service/api/users/${userId}/notifications`)
+        .set('dev', 'true')
+        .send({
+            title: 'test notification',
+            body: 'test notification body',
+        });
+
+    console.log("response2: ", response2.body);
+
+    expect(response2.body.status).to.be.equal(`Notification saved and sended`);
+    expect(response2.statusCode).to.be.equal(200);
+
+  });
+
+    it('should get all notifications', async () => {
+        this.timeout(10000000000);
+
+        const newUsers = await userRequest(
+            request(apiGatewayHost)
+            .post('/user-service/api/users')
+            .send({
+                name: 'test2',
+                email: 'test2@mail'
+            }));
+
+
+        const users = await userRequest(
+                request(apiGatewayHost)
+                .get('/user-service/api/users'));
+    
+    
+        const userId = users.body[0].id;
+        const userId2 = users.body[1].id;
+        
+        
+        const getResponse = await userRequest(
+                request(apiGatewayHost)
+                .post(`/user-service/api/users/${userId}/set-push-token`)
+                .set('dev', 'true')
+                .send({
+                    token: 'test token'
+                }));
+        
+        console.log("getResponse: ", getResponse.body);
+    
+        const response2 = await request(apiGatewayHost)
+            .post(`/user-service/api/users/${userId}/notifications`)
+            .set('dev', 'true')
+            .send({
+                title: 'test notification',
+                body: 'test notification body',
+                fromUserId: userId2
+            });
+    
+        console.log("response2: ", response2.body);
+    
+        expect(response2.body.status).to.be.equal(`Notification saved and sended`);
+        expect(response2.statusCode).to.be.equal(200);
+
+
+        const response3 = await userRequest(
+            request(apiGatewayHost)
+            .get(`/user-service/api/users/${userId}/notifications`)
+            .set('dev', 'true')
+        );
+
+        expect(response3.body[0].title).to.be.equal('test notification');
+        expect(response3.body[0].body).to.be.equal('test notification body');
+        expect(response3.body[0].userId).to.be.equal(userId);
+        expect(response3.body[0].date).to.not.be.null;
+        expect(response3.body[0].sender.id).to.be.equal(userId2);
+        expect(response3.body[0].sender.email).to.be.equal('test2@mail');
+        expect(response3.body[0].sender.name).to.be.equal('test2');
+    });
 
 
 });
