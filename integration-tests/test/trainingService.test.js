@@ -1466,7 +1466,7 @@ describe('Integration Tests ', () => {
     );
 
     expect(response2.statusCode).to.be.equal(400);
-    expect(response2.body).to.have.property('message', 'Faltan campos obligatorios (titulo, tipo o descripción)');
+    expect(response2.body).to.have.property('message', 'Faltan campos obligatorios (titulo, tipo, metrica o descripción)');
 
       }
   );
@@ -1483,6 +1483,10 @@ describe('Integration Tests ', () => {
           metric: 100
         })
     );
+
+    console.log(goal.body);
+    console.log(goal.statusCode);
+
 
     const response = await authedRequest(
       request(apiGatewayHost)
@@ -1515,6 +1519,8 @@ describe('Integration Tests ', () => {
     );
 
     console.log(goal.body);
+    console.log(goal.statusCode);
+
 
     const response = await authedRequest(
       request(apiGatewayHost)
@@ -1527,8 +1533,6 @@ describe('Integration Tests ', () => {
 
         })
     );
-
-    console.log(response.body);
 
     expect(response.statusCode).to.be.equal(200);
     expect(response.body).to.have.property('title', 'Test goal updated');
@@ -1579,6 +1583,11 @@ describe('Integration Tests ', () => {
           metric: 100
         })
     );
+
+    console.log(goal.statusCode);
+    console.log(goal.body);
+    console.log(goal.statusCode);
+
 
     const response = await authedRequest(
       request(apiGatewayHost)
